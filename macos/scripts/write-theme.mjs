@@ -36,14 +36,67 @@ async function atomicWrite(file, value) {
   }
 }
 
+async function replaceWithBundledDemo(outputDir) {
+  const bundledDir = path.join(root, "assets");
+  const bundledThemePath = path.join(bundledDir, "theme.json");
+  const themeText = await fs.readFile(bundledThemePath, "utf8");
+  const theme = JSON.parse(themeText);
+  if (theme.schemaVersion !== 1 || typeof theme.image !== "string" || !theme.image) {
+    throw new Error("The bundled demo theme has an unsupported schema or image field.");
+  }
+  if (path.basename(theme.image) !== theme.image) {
+    throw new Error("The bundled demo image must stay inside the assets directory.");
+  }
+
+  const bundledImagePath = path.join(bundledDir, theme.image);
+  const imageStat = await fs.stat(bundledImagePath);
+  if (!imageStat.isFile() || imageStat.size < 1 || imageStat.size > 16 * 1024 * 1024) {
+    throw new Error("The bundled demo image must be non-empty and no larger than 16 MB.");
+  }
+
+  const suffix = `${process.pid}.${Date.now()}`;
+  const stagingDir = `${outputDir}.reset.${suffix}`;
+  const previousDir = `${outputDir}.previous.${suffix}`;
+  await fs.mkdir(path.dirname(outputDir), { recursive: true, mode: 0o700 });
+  await fs.mkdir(stagingDir, { mode: 0o700 });
+  let previousSaved = false;
+  try {
+    await fs.writeFile(path.join(stagingDir, "theme.json"), themeText, { mode: 0o600 });
+    await fs.copyFile(bundledImagePath, path.join(stagingDir, theme.image));
+    await fs.chmod(path.join(stagingDir, theme.image), 0o600);
+    try {
+      await fs.rename(outputDir, previousDir);
+      previousSaved = true;
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+    await fs.rename(stagingDir, outputDir);
+  } catch (error) {
+    if (previousSaved) {
+      try {
+        await fs.rename(previousDir, outputDir);
+      } catch (rollbackError) {
+        throw new AggregateError(
+          [error, rollbackError],
+          `Could not activate the bundled demo or restore the previous theme; backup remains at ${previousDir}`,
+        );
+      }
+    }
+    throw error;
+  } finally {
+    await fs.rm(stagingDir, { recursive: true, force: true }).catch(() => {});
+  }
+  if (previousSaved) await fs.rm(previousDir, { recursive: true, force: true });
+}
+
 const outputDir = path.resolve(valueFor("output-dir", path.join(root, "assets")));
 const themePath = path.join(outputDir, "theme.json");
 
 if (mode === "reset-demo") {
   if (outputDir === path.join(root, "assets")) {
-    throw new Error("Refusing to delete the bundled demo assets; pass a user --output-dir.");
+    throw new Error("Refusing to overwrite the bundled demo assets; pass a user --output-dir.");
   }
-  await fs.rm(outputDir, { recursive: true, force: true });
+  await replaceWithBundledDemo(outputDir);
   console.log("Restored the bundled abstract demo preset.");
   process.exit(0);
 }

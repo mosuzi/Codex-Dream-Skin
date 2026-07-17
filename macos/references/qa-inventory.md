@@ -5,10 +5,11 @@
 1. Home route shows one independent image banner, live native heading, two to four native suggestion cards, the real project selector, and native composer.
 2. Normal tasks show the selected image behind restrained gradients and translucent live content surfaces.
 3. Sidebar, navigation, messages, approvals, project selector, attachments, composer, menus, hover, focus, and keyboard input remain native and interactive.
-4. Decorative layers have `pointer-events: none`; no screenshot or raster UI is used as an overlay.
-5. Route changes, renderer reloads, and ordinary refreshes reapply the current theme while the verified injector runs.
-6. Official application signature and `app.asar` remain unchanged.
-7. Restore removes live DOM/CSS, restores the two saved base-theme values, closes the CDP session after restart, and supports later reinstallation.
+4. Composer portals, quota/status and queue layers, built-in ChatGPT, right/bottom panels, the personal menu, and the complete settings renderer share the active theme.
+5. Decorative layers have `pointer-events: none`; no screenshot or raster UI is used as an overlay.
+6. Route changes, renderer reloads, and ordinary refreshes reapply the current theme while the verified injector runs, including settings-only routes without a composer.
+7. Official application signature and `app.asar` remain unchanged.
+8. Restore removes live DOM/CSS, restores the two saved base-theme values, closes the CDP session after restart, and supports later reinstallation.
 
 ## Automated checks
 
@@ -20,7 +21,7 @@
 - Official app and internal Node signature, Team ID, architecture, and version validation.
 - Port collision selection and saved-port reuse.
 - PID reuse protection through PID, start time, executable, script path, and command-line matching.
-- Live verification after `Page.reload` returns version `1.0.0` and `pass: true`.
+- Live verification after `Page.reload` returns the current version and `pass: true` on both normal and settings renderers.
 - Strict home verification requires a visible banner of at least 320×160, two to four visible native cards, visible project button, composer, sidebar, non-interactive decoration, and no horizontal overflow.
 
 ## Visual checks
@@ -30,6 +31,8 @@
 - Task route: background remains atmospheric, messages and output panels keep high contrast, and the composer remains reachable.
 - Selected image contains no fake interface controls or raster text intended to impersonate Codex.
 - Inspect sidebar selection, header, banner edges, cards, project label, composer buttons, scrollbars, focus outlines, dialogs, and menus.
+- Open the personal menu and enter Settings through its real menu item; sample General, Appearance, and Plugins, including one settings dropdown.
+- Inspect the quota/status layer, ChatGPT page, right sidebar, and bottom panel whenever theme structure or selectors change.
 
 ## Release signoff
 

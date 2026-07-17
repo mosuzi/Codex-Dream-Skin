@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "1.1.2";
+const SKIN_VERSION = "1.1.3";
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
 const MAX_ART_BYTES = 16 * 1024 * 1024;
 
@@ -159,12 +159,15 @@ async function probeSession(session) {
       sidebar: Boolean(document.querySelector('aside.app-shell-left-panel')),
       composer: Boolean(document.querySelector('.composer-surface-chrome')),
       main: Boolean(document.querySelector('[role="main"]')),
+      settings: Boolean(document.querySelector('.app-shell-left-panel [data-settings-panel-slug]')),
+      settingsSurface: Boolean(document.querySelector('div.main-surface')),
     };
     return {
       title: document.title,
       href: location.href,
       markers,
-      codex: markers.shell && markers.sidebar && (markers.composer || markers.main),
+      codex: (markers.shell && markers.sidebar && (markers.composer || markers.main))
+        || (markers.settings && markers.settingsSurface),
     };
   })()`);
 }
@@ -335,6 +338,10 @@ async function verifySession(session) {
     const projectButton = box(home?.querySelector('.group\\\\/project-selector > button'));
     const composer = box(document.querySelector('.composer-surface-chrome'));
     const sidebar = box(document.querySelector('aside.app-shell-left-panel'));
+    const settingsSidebar = box(document.querySelector('.app-shell-left-panel:has([data-settings-panel-slug])'));
+    const settingsSurface = box(document.querySelector(
+      '.app-shell-left-panel:has([data-settings-panel-slug]) + [class~="relative"][class~="isolate"] > .main-surface'
+    ));
     const chrome = document.getElementById('codex-dream-skin-chrome');
     const result = {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
@@ -350,15 +357,19 @@ async function verifySession(session) {
       projectButton,
       composer,
       sidebar,
+      settingsSidebar,
+      settingsSurface,
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: {
         x: document.documentElement.scrollWidth > document.documentElement.clientWidth,
         y: document.documentElement.scrollHeight > document.documentElement.clientHeight,
       },
     };
+    const shellPass = (Boolean(result.composer?.visible) && Boolean(result.sidebar?.visible)) ||
+      (Boolean(result.settingsSidebar?.visible) && Boolean(result.settingsSurface?.visible));
     const basePass = result.installed && result.version === ${JSON.stringify(SKIN_VERSION)} &&
       result.stylePresent && result.chromePresent && result.chromePointerEvents === 'none' &&
-      Boolean(result.composer?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x;
+      shellPass && !result.documentOverflow.x;
     // Project selector markup varies across Codex builds — soft requirement.
     const homePass = !result.homeRoute || (
       result.homePresent && result.hero?.visible && result.hero.width >= 280 && result.hero.height >= 120 &&

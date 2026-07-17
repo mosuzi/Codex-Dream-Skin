@@ -18,6 +18,22 @@ if /usr/bin/grep -R -n -E 'dream-skin-skin|DREAM_SKIN_SKIN|1\.0\.0-rc2' \
   printf 'Legacy release-candidate identifiers remain in runtime files.\n' >&2
   exit 1
 fi
+for selector in \
+  'section[role="dialog"][class~="bg-token-dropdown-background"]' \
+  'data-app-shell-focus-area="right-panel"' \
+  'data-app-shell-focus-area="bottom-panel"' \
+  '[role="menu"][class~="bg-token-dropdown-background/90"]' \
+  'data-settings-panel-slug' \
+  'class~="max-h-[320px]"'; do
+  if ! /usr/bin/grep -F -q "$selector" "$ROOT/assets/dream-skin.css"; then
+    printf 'Required App Shell theme selector is missing: %s\n' "$selector" >&2
+    exit 1
+  fi
+done
+if ! /usr/bin/grep -F -q '[data-settings-panel-slug]' "$ROOT/scripts/injector.mjs"; then
+  printf 'The injector does not recognize the settings renderer.\n' >&2
+  exit 1
+fi
 if /usr/bin/grep -R -n -E '(writeFile|rename|copyFile|rm).*app\.asar' "$ROOT/scripts" >/dev/null; then
   printf 'A runtime script appears to mutate app.asar.\n' >&2
   exit 1
@@ -80,7 +96,14 @@ fi
 /usr/bin/printf '%s\n' "$MISSING_THEME_OUTPUT" | /usr/bin/grep -F -q \
   "Explicit theme directory is missing theme.json: $TMP/missing-theme/theme.json"
 "$NODE" "$ROOT/scripts/write-theme.mjs" reset-demo --output-dir "$TMP/theme" >/dev/null
-[ ! -e "$TMP/theme" ]
+RESET_PAYLOAD_JSON="$("$NODE" "$ROOT/scripts/injector.mjs" --check-payload --theme-dir "$TMP/theme")"
+"$NODE" -e '
+  const value = JSON.parse(process.argv[1]);
+  if (!value.pass || value.themeName !== "Dream Skin" || value.imageBytes < 1) process.exit(1);
+' "$RESET_PAYLOAD_JSON"
+[ -f "$TMP/theme/theme.json" ]
+[ -f "$TMP/theme/portal-hero.png" ]
+[ ! -e "$TMP/theme/background.png" ]
 
 CONFIG="$TMP/config.toml"
 BACKUP="$TMP/theme-backup.json"
@@ -110,7 +133,35 @@ NO_DESKTOP_BACKUP="$TMP/theme-backup-without-desktop.json"
 "$NODE" "$ROOT/scripts/theme-config.mjs" restore "$NO_DESKTOP_CONFIG" "$NO_DESKTOP_BACKUP" >/dev/null
 /usr/bin/cmp -s "$NO_DESKTOP_CONFIG" "$TMP/original-without-desktop.toml"
 
-/usr/bin/env -u HOME /bin/bash -c '. "$1/scripts/common-macos.sh"; [ -n "$HOME" ] && [ "$SKIN_VERSION" = "1.1.2" ]' _ "$ROOT"
-"$ROOT/scripts/doctor-macos.sh" >/dev/null
+INSTALL_HOME="$TMP/install-home"
+INSTALL_CONFIG="$INSTALL_HOME/.codex/config.toml"
+CODEX_APP_BUNDLE="${NODE%/Contents/Resources/cua_node/bin/node}"
+/bin/mkdir -p "$(dirname "$INSTALL_CONFIG")"
+/usr/bin/printf '%s\n' 'model = "gpt-5"' > "$INSTALL_CONFIG"
+HOME="$INSTALL_HOME" CODEX_APP_BUNDLE="$CODEX_APP_BUNDLE" \
+  "$ROOT/scripts/install-dream-skin-macos.sh" --no-launch --no-launchers >/dev/null
+INSTALLED_ROOT="$INSTALL_HOME/.codex/codex-dream-skin-studio"
+INSTALLED_THEME="$INSTALL_HOME/Library/Application Support/CodexDreamSkinStudio/theme"
+[ -f "$INSTALLED_THEME/theme.json" ]
+[ -f "$INSTALLED_THEME/portal-hero.png" ]
+HOME="$INSTALL_HOME" CODEX_APP_BUNDLE="$CODEX_APP_BUNDLE" \
+  "$INSTALLED_ROOT/scripts/doctor-macos.sh" >/dev/null
 
-printf 'PASS: syntax, payload, runtime-state safety, custom-theme, config round-trips, HOME recovery, signature, and doctor checks.\n'
+BROKEN_HOME="$TMP/broken-install-home"
+BROKEN_CONFIG="$BROKEN_HOME/.codex/config.toml"
+BROKEN_THEME="$BROKEN_HOME/Library/Application Support/CodexDreamSkinStudio/theme"
+/bin/mkdir -p "$(dirname "$BROKEN_CONFIG")" "$BROKEN_THEME"
+/usr/bin/printf '%s\n' 'model = "gpt-5"' > "$BROKEN_CONFIG"
+if BROKEN_INSTALL_OUTPUT="$(
+  HOME="$BROKEN_HOME" CODEX_APP_BUNDLE="$CODEX_APP_BUNDLE" \
+    "$ROOT/scripts/install-dream-skin-macos.sh" --no-launch --no-launchers 2>&1
+)"; then
+  printf 'Clean-install initialization unexpectedly replaced an incomplete explicit theme directory.\n' >&2
+  exit 1
+fi
+/usr/bin/printf '%s\n' "$BROKEN_INSTALL_OUTPUT" | /usr/bin/grep -F -q \
+  "Explicit theme directory is missing theme.json: $BROKEN_THEME/theme.json"
+
+/usr/bin/env -u HOME /bin/bash -c '. "$1/scripts/common-macos.sh"; [ -n "$HOME" ] && [ "$SKIN_VERSION" = "1.1.3" ]' _ "$ROOT"
+
+printf 'PASS: syntax, payload, runtime-state safety, custom/reset themes, clean install, config round-trips, HOME recovery, signature, and doctor checks.\n'
