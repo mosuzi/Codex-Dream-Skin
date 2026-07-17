@@ -9,7 +9,12 @@ const windowsRoot = path.resolve(here, "..");
 const template = await fs.readFile(path.join(windowsRoot, "assets", "renderer-inject.js"), "utf8");
 const payload = template
   .replace("__DREAM_CSS_JSON__", JSON.stringify(".fixture { color: blue; }"))
-  .replace("__DREAM_ART_JSON__", JSON.stringify("data:image/png;base64,AA=="));
+  .replace("__DREAM_ART_JSON__", JSON.stringify("data:image/png;base64,AA=="))
+  .replace("__DREAM_PROFILE_JSON__", JSON.stringify({
+    brand: { title: "Fixture", subtitle: "Theme" },
+    art: { overlay: "rgba(1, 2, 3, .4)", position: "center", size: "cover" },
+    composer: { background: "rgba(4, 5, 6, .7)", borderColor: "rgb(7, 8, 9)", outlineColor: "rgb(10, 11, 12)" },
+  }));
 
 function createFixture({ shellPresent, staleSkin = false }) {
   const nodes = new Map();
@@ -126,12 +131,16 @@ const mainResult = vm.runInNewContext(payload, main.context);
 assert.equal(mainResult.installed, true);
 assert.equal(main.rootClasses.has("codex-dream-skin"), true);
 assert.equal(main.rootStyles.get("--dream-art"), 'url("blob:fixture")');
+assert.equal(main.rootStyles.get("--dream-overlay"), "rgba(1, 2, 3, .4)");
+assert.equal(main.rootStyles.get("--dream-composer-background"), "rgba(4, 5, 6, .7)");
 assert.equal(main.nodes.has("codex-dream-skin-style"), true);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), true);
 assert.equal(main.context.window.__CODEX_DREAM_SKIN_STATE__.cleanup(), true);
 assert.equal(main.rootClasses.has("codex-dream-skin"), false);
 assert.equal(main.nodes.has("codex-dream-skin-style"), false);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), false);
+assert.equal(main.rootStyles.has("--dream-overlay"), false);
+assert.equal(main.rootStyles.has("--dream-composer-background"), false);
 assert.deepEqual(main.revokedUrls, ["blob:fixture"]);
 
 const auxiliary = createFixture({ shellPresent: false, staleSkin: true });
@@ -139,6 +148,8 @@ const auxiliaryResult = vm.runInNewContext(payload, auxiliary.context);
 assert.equal(auxiliaryResult.installed, true);
 assert.equal(auxiliary.rootClasses.has("codex-dream-skin"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-art"), false);
+assert.equal(auxiliary.rootStyles.has("--dream-overlay"), false);
+assert.equal(auxiliary.rootStyles.has("--dream-composer-background"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-style"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-chrome"), false);
 

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "nangong-wan-windows",
+  "platform": "windows",
+  "artPath": "F:\\mosuzi\\pics\\南宫婉1.png",
+  "brand": {
+    "title": "南宫婉 · 月下清辉",
+    "subtitle": "Codex 自定义主题"
+  },
+  "art": {
+    "overlay": "rgba(3, 9, 17, .68)",
+    "position": "-100% center",
+    "size": "cover"
+  },
+  "composer": {
+    "background": "rgba(8, 19, 33, .80)",
+    "borderColor": "rgba(112, 145, 177, .38)",
+    "outlineColor": "rgba(112, 145, 177, .28)"
+  }
+}

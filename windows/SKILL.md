@@ -38,6 +38,14 @@ node --check scripts\injector.mjs
 node --check assets\renderer-inject.js
 ```
 
+## Reusing the verified theme baseline
+
+The full-shell visual baseline is saved in `themes/`. To create a new art theme,
+copy `themes/theme-template.json`, set its `artPath` and brand fields, then run
+`scripts/use-dream-theme.ps1 -ProfilePath <profile> -Reapply`. This preserves
+the verified layout, overlay, composer border, settings treatment, and
+bottom-band fix; see `themes/README.md` for the available art controls.
+
 ## Resources
 
 - `scripts/injector.mjs`: CDP connection, renderer injection, verification, screenshot, and removal.

@@ -1,7 +1,20 @@
-((cssText, artDataUrl) => {
+((cssText, artDataUrl, profile) => {
   const STATE_KEY = "__CODEX_DREAM_SKIN_STATE__";
   const STYLE_ID = "codex-dream-skin-style";
   const CHROME_ID = "codex-dream-skin-chrome";
+  const profileValues = {
+    title: profile?.brand?.title || "Codex Dream Skin",
+    subtitle: profile?.brand?.subtitle || "Custom theme",
+    overlay: profile?.art?.overlay || "rgba(3, 9, 17, .68)",
+    artPosition: profile?.art?.position || "-100% center",
+    artSize: profile?.art?.size || "cover",
+    composerBackground: profile?.composer?.background || "rgba(8, 19, 33, .80)",
+    composerBorderColor: profile?.composer?.borderColor || "rgba(112, 145, 177, .38)",
+    composerOutlineColor: profile?.composer?.outlineColor || "rgba(112, 145, 177, .28)",
+  };
+  const escapeHtml = (value) => String(value).replace(/[&<>\"']/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
+  })[character]);
   window.__CODEX_DREAM_SKIN_DISABLED__ = false;
 
   const previous = window[STATE_KEY];
@@ -18,12 +31,18 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "1";
+    existingStyle.dataset.dreamVersion = "4.0";
   }
 
   const clearSkinDom = () => {
     document.documentElement?.classList.remove("codex-dream-skin");
     document.documentElement?.style.removeProperty("--dream-art");
+    document.documentElement?.style.removeProperty("--dream-overlay");
+    document.documentElement?.style.removeProperty("--dream-art-position");
+    document.documentElement?.style.removeProperty("--dream-art-size");
+    document.documentElement?.style.removeProperty("--dream-composer-background");
+    document.documentElement?.style.removeProperty("--dream-composer-border-color");
+    document.documentElement?.style.removeProperty("--dream-composer-outline-color");
     document.querySelectorAll(".dream-home").forEach((node) => node.classList.remove("dream-home"));
     document.querySelectorAll(".dream-home-shell").forEach((node) => node.classList.remove("dream-home-shell"));
     document.getElementById(STYLE_ID)?.remove();
@@ -44,6 +63,12 @@
 
     root.classList.add("codex-dream-skin");
     root.style.setProperty("--dream-art", `url("${artUrl}")`);
+    root.style.setProperty("--dream-overlay", profileValues.overlay);
+    root.style.setProperty("--dream-art-position", profileValues.artPosition);
+    root.style.setProperty("--dream-art-size", profileValues.artSize);
+    root.style.setProperty("--dream-composer-background", profileValues.composerBackground);
+    root.style.setProperty("--dream-composer-border-color", profileValues.composerBorderColor);
+    root.style.setProperty("--dream-composer-outline-color", profileValues.composerOutlineColor);
 
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -51,9 +76,9 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "1") {
+    if (style.dataset.dreamVersion !== "4.0") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "1";
+      style.dataset.dreamVersion = "4.0";
     }
 
     const home = document.querySelector('[role="main"]:has([data-testid="home-icon"])');
@@ -70,11 +95,8 @@
       chrome.id = CHROME_ID;
       chrome.setAttribute("aria-hidden", "true");
       chrome.innerHTML = `
-        <div class="dream-brand"><span class="dream-note">♫</span><span><b>薛凯琪专属定制皮肤</b><small>Codex App 限定版 ✦</small></span></div>
-        <div class="dream-signature">Fiona Sit ♡</div>
-        <div class="dream-sparkles"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="dream-ribbon"><span>♡</span>🎀<span>✦</span></div>
-        <div class="dream-polaroid"></div>`;
+        <div class="dream-brand"><span class="dream-note">☾</span><span><b>${escapeHtml(profileValues.title)}</b><small>${escapeHtml(profileValues.subtitle)}</small></span></div>
+        <div class="dream-signature">Moonlit Codex</div>`;
       document.body.appendChild(chrome);
     }
     const shellBox = shellMain.getBoundingClientRect();
@@ -108,7 +130,7 @@
   const observer = new MutationObserver(scheduleEnsure);
   observer.observe(document.documentElement, { childList: true, subtree: true });
   const timer = setInterval(ensure, 5000);
-  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "1.0.0" };
+  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.0.0" };
   ensure();
-  return { installed: true, version: "1.0.0" };
-})(__DREAM_CSS_JSON__, __DREAM_ART_JSON__)
+  return { installed: true, version: "4.0.0" };
+})(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_PROFILE_JSON__)

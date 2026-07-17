@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "1.0.0";
+const SKIN_VERSION = "4.0.0";
+const ACTIVE_PROFILE_PATH = path.join(root, "themes", "active.json");
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
 const BROWSER_ID_PATTERN = /^[A-Za-z0-9._-]{1,200}$/;
 
@@ -267,15 +268,24 @@ async function connectBrowserIdentityAnchor(port, expectedBrowserId) {
 }
 
 async function loadPayload() {
-  const [css, template, art] = await Promise.all([
+  const [css, template, profileText] = await Promise.all([
     fs.readFile(path.join(root, "assets", "dream-skin.css"), "utf8"),
     fs.readFile(path.join(root, "assets", "renderer-inject.js"), "utf8"),
-    fs.readFile(path.join(root, "assets", "dream-reference.png")),
+    fs.readFile(ACTIVE_PROFILE_PATH, "utf8"),
   ]);
-  const artDataUrl = `data:image/png;base64,${art.toString("base64")}`;
+  let profile;
+  try { profile = JSON.parse(profileText); } catch { throw new Error(`Theme profile is not valid JSON: ${ACTIVE_PROFILE_PATH}`); }
+  if (!profile || typeof profile !== "object" || Array.isArray(profile) || typeof profile.artPath !== "string" || !path.isAbsolute(profile.artPath)) {
+    throw new Error(`Theme profile must include an absolute artPath: ${ACTIVE_PROFILE_PATH}`);
+  }
+  const art = await fs.readFile(profile.artPath);
+  const extension = path.extname(profile.artPath).toLowerCase();
+  const mime = extension === ".jpg" || extension === ".jpeg" ? "image/jpeg" : extension === ".webp" ? "image/webp" : "image/png";
+  const artDataUrl = `data:${mime};base64,${art.toString("base64")}`;
   return template
     .replace("__DREAM_CSS_JSON__", JSON.stringify(css))
-    .replace("__DREAM_ART_JSON__", JSON.stringify(artDataUrl));
+    .replace("__DREAM_ART_JSON__", JSON.stringify(artDataUrl))
+    .replace("__DREAM_PROFILE_JSON__", JSON.stringify(profile));
 }
 
 async function probeSession(session) {
@@ -382,6 +392,7 @@ async function verifySession(session) {
       cards,
       composer: box(document.querySelector('.composer-surface-chrome')),
       sidebar: box(document.querySelector('aside.app-shell-left-panel')),
+      settingsSurface: Boolean(document.querySelector('.app-shell-main-content-viewport')),
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: {
         x: document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -390,7 +401,8 @@ async function verifySession(session) {
     };
     result.pass = result.installed && result.version === result.expectedVersion &&
       result.stylePresent && result.chromePresent &&
-      result.chromePointerEvents === 'none' && Boolean(result.composer) && Boolean(result.sidebar) &&
+      result.chromePointerEvents === 'none' && (Boolean(result.composer) || result.settingsSurface) &&
+      Boolean(result.sidebar) &&
       (!result.homePresent || (Boolean(result.hero) &&
         (!result.suggestionsPresent || (result.cards.length >= 2 && result.cards.length <= 4))));
     return result;
