@@ -16,7 +16,7 @@ This file is an optional Codex capability entry. The delivery is a complete stan
 5. Verify both a normal task and the settings renderer. Include the personal menu, composer-adjacent overlays, ChatGPT page, right/bottom panels, settings sidebar/content/cards/forms, and settings popups.
 6. Restore the official appearance with `Restore Codex Dream Skin.command` when requested.
 
-Read [references/one-image-theme-workflow.md](references/one-image-theme-workflow.md) whenever the user provides a new image or asks to replace the current personalized theme. Read [references/surface-selector-recipes.md](references/surface-selector-recipes.md) before editing any page, panel, menu, popup, or settings styling. The selector recipes are the implementation source of truth; do not rediscover known surfaces from screenshots.
+Read [references/one-image-theme-workflow.md](references/one-image-theme-workflow.md) whenever the user provides a new image or asks to replace the current personalized theme. Read [references/surface-selector-recipes.md](references/surface-selector-recipes.md) before editing any page, panel, menu, popup, or settings styling. Read [references/dock-launcher-workflow.md](references/dock-launcher-workflow.md) when creating, repairing, re-iconing, or re-adding the optional Dock launcher. These references are the implementation source of truth; do not rediscover known surfaces or launcher behavior from screenshots.
 
 ## Guardrails
 
@@ -37,4 +37,5 @@ Read [references/one-image-theme-workflow.md](references/one-image-theme-workflo
 - `assets/renderer-inject.js`: idempotent DOM integration and cleanup.
 - `scripts/doctor-macos.sh`: signed-runtime, payload, and optional live-session self-check.
 - `references/surface-selector-recipes.md`: exact selector, CSS, injector, and hot-apply recipes for every covered surface.
+- `references/dock-launcher-workflow.md`: reproducible app wrapper, icon, signing, LaunchServices, Dock, running-indicator, and question-mark repair procedure.
 - `references/qa-inventory.md`: release and visual acceptance criteria.

@@ -91,6 +91,12 @@ Reset to the bundled abstract demo:
 ~/.codex/codex-dream-skin-studio/scripts/customize-theme-macos.sh --reset-demo
 ```
 
+## Optional Dock launcher
+
+For a separate Dock entry with a distinguishable themed icon, use the reproducible wrapper and registration procedure in [references/dock-launcher-workflow.md](references/dock-launcher-workflow.md).
+
+The wrapper starts or reapplies the theme and then exits. The official ChatGPT/Codex app remains the running application, so macOS shows the persistent running indicator under the official app icon. This is intentional and preserves the official bundle identity, signature, and updater.
+
 ## License
 
 MIT — see `LICENSE`. Additional notices in `NOTICE.md` (trademarks, demo asset, runtime Node).
