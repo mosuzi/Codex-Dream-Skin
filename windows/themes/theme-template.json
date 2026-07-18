@@ -16,5 +16,8 @@
     "background": "rgba(8, 19, 33, .80)",
     "borderColor": "rgba(112, 145, 177, .38)",
     "outlineColor": "rgba(112, 145, 177, .28)"
+  },
+  "profileCards": {
+    "padding": "12px"
   }
 }

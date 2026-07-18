@@ -14,6 +14,7 @@ const payload = template
     brand: { title: "Fixture", subtitle: "Theme" },
     art: { overlay: "rgba(1, 2, 3, .4)", position: "center", size: "cover" },
     composer: { background: "rgba(4, 5, 6, .7)", borderColor: "rgb(7, 8, 9)", outlineColor: "rgb(10, 11, 12)" },
+    profileCards: { padding: "15px" },
   }));
 
 function createFixture({ shellPresent, staleSkin = false }) {
@@ -133,6 +134,7 @@ assert.equal(main.rootClasses.has("codex-dream-skin"), true);
 assert.equal(main.rootStyles.get("--dream-art"), 'url("blob:fixture")');
 assert.equal(main.rootStyles.get("--dream-overlay"), "rgba(1, 2, 3, .4)");
 assert.equal(main.rootStyles.get("--dream-composer-background"), "rgba(4, 5, 6, .7)");
+assert.equal(main.rootStyles.get("--dream-profile-card-padding"), "15px");
 assert.equal(main.nodes.has("codex-dream-skin-style"), true);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), true);
 assert.equal(main.context.window.__CODEX_DREAM_SKIN_STATE__.cleanup(), true);
@@ -141,6 +143,7 @@ assert.equal(main.nodes.has("codex-dream-skin-style"), false);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), false);
 assert.equal(main.rootStyles.has("--dream-overlay"), false);
 assert.equal(main.rootStyles.has("--dream-composer-background"), false);
+assert.equal(main.rootStyles.has("--dream-profile-card-padding"), false);
 assert.deepEqual(main.revokedUrls, ["blob:fixture"]);
 
 const auxiliary = createFixture({ shellPresent: false, staleSkin: true });
@@ -150,6 +153,7 @@ assert.equal(auxiliary.rootClasses.has("codex-dream-skin"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-art"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-overlay"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-composer-background"), false);
+assert.equal(auxiliary.rootStyles.has("--dream-profile-card-padding"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-style"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-chrome"), false);
 

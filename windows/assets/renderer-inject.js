@@ -11,6 +11,7 @@
     composerBackground: profile?.composer?.background || "rgba(8, 19, 33, .80)",
     composerBorderColor: profile?.composer?.borderColor || "rgba(112, 145, 177, .38)",
     composerOutlineColor: profile?.composer?.outlineColor || "rgba(112, 145, 177, .28)",
+    profileCardPadding: profile?.profileCards?.padding || "12px",
   };
   const escapeHtml = (value) => String(value).replace(/[&<>\"']/g, (character) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
@@ -31,7 +32,7 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "4.0";
+    existingStyle.dataset.dreamVersion = "4.2";
   }
 
   const clearSkinDom = () => {
@@ -43,6 +44,7 @@
     document.documentElement?.style.removeProperty("--dream-composer-background");
     document.documentElement?.style.removeProperty("--dream-composer-border-color");
     document.documentElement?.style.removeProperty("--dream-composer-outline-color");
+    document.documentElement?.style.removeProperty("--dream-profile-card-padding");
     document.querySelectorAll(".dream-home").forEach((node) => node.classList.remove("dream-home"));
     document.querySelectorAll(".dream-home-shell").forEach((node) => node.classList.remove("dream-home-shell"));
     document.getElementById(STYLE_ID)?.remove();
@@ -69,6 +71,7 @@
     root.style.setProperty("--dream-composer-background", profileValues.composerBackground);
     root.style.setProperty("--dream-composer-border-color", profileValues.composerBorderColor);
     root.style.setProperty("--dream-composer-outline-color", profileValues.composerOutlineColor);
+    root.style.setProperty("--dream-profile-card-padding", profileValues.profileCardPadding);
 
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -76,9 +79,9 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "4.0") {
+    if (style.dataset.dreamVersion !== "4.2") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "4.0";
+      style.dataset.dreamVersion = "4.2";
     }
 
     const home = document.querySelector('[role="main"]:has([data-testid="home-icon"])');
@@ -130,7 +133,7 @@
   const observer = new MutationObserver(scheduleEnsure);
   observer.observe(document.documentElement, { childList: true, subtree: true });
   const timer = setInterval(ensure, 5000);
-  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.0.0" };
+  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.2.0" };
   ensure();
-  return { installed: true, version: "4.0.0" };
+  return { installed: true, version: "4.2.0" };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_PROFILE_JSON__)

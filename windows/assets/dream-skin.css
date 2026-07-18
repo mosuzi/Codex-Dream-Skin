@@ -13,6 +13,7 @@
   --dream-composer-background: rgba(8, 19, 33, .80);
   --dream-composer-border-color: rgba(112, 145, 177, .38);
   --dream-composer-outline-color: rgba(112, 145, 177, .28);
+  --dream-profile-card-padding: 12px;
 }
 
 html.codex-dream-skin body {
@@ -259,6 +260,8 @@ html.codex-dream-skin .main-surface section > div.flex.flex-col > div.flex.flex-
   background: linear-gradient(145deg, rgba(18, 39, 63, .68), rgba(7, 16, 29, .78)) !important;
   border: 1px solid rgba(161, 193, 225, .22) !important;
   border-radius: 13px !important;
+  box-sizing: border-box !important;
+  padding: var(--dream-profile-card-padding) !important;
   overflow: hidden;
 }
 
