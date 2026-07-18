@@ -19,5 +19,24 @@
   },
   "profileCards": {
     "padding": "12px"
+  },
+  "home": {
+    "brandTop": "5px",
+    "brandTitleLineHeight": "1.2",
+    "brandSubtitleMarginTop": "1px",
+    "brandSubtitleLineHeight": "1.2",
+    "welcomePanel": {
+      "background": "transparent",
+      "border": "0",
+      "radius": "0",
+      "shadow": "none",
+      "overflow": "visible"
+    }
+  },
+  "sidebar": {
+    "newTask": {
+      "innerBackground": "transparent",
+      "innerShadow": "none"
+    }
   }
 }

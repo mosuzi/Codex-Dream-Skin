@@ -12,6 +12,17 @@
     composerBorderColor: profile?.composer?.borderColor || "rgba(112, 145, 177, .38)",
     composerOutlineColor: profile?.composer?.outlineColor || "rgba(112, 145, 177, .28)",
     profileCardPadding: profile?.profileCards?.padding || "12px",
+    homeBrandTop: profile?.home?.brandTop || "5px",
+    homeBrandTitleLineHeight: profile?.home?.brandTitleLineHeight || "1.2",
+    homeBrandSubtitleMarginTop: profile?.home?.brandSubtitleMarginTop || "1px",
+    homeBrandSubtitleLineHeight: profile?.home?.brandSubtitleLineHeight || "1.2",
+    homeWelcomePanelBackground: profile?.home?.welcomePanel?.background || "transparent",
+    homeWelcomePanelBorder: profile?.home?.welcomePanel?.border || "0",
+    homeWelcomePanelRadius: profile?.home?.welcomePanel?.radius || "0",
+    homeWelcomePanelShadow: profile?.home?.welcomePanel?.shadow || "none",
+    homeWelcomePanelOverflow: profile?.home?.welcomePanel?.overflow || "visible",
+    sidebarNewTaskInnerBackground: profile?.sidebar?.newTask?.innerBackground || "transparent",
+    sidebarNewTaskInnerShadow: profile?.sidebar?.newTask?.innerShadow || "none",
   };
   const escapeHtml = (value) => String(value).replace(/[&<>\"']/g, (character) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
@@ -32,7 +43,7 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "4.2";
+    existingStyle.dataset.dreamVersion = "4.4";
   }
 
   const clearSkinDom = () => {
@@ -45,6 +56,17 @@
     document.documentElement?.style.removeProperty("--dream-composer-border-color");
     document.documentElement?.style.removeProperty("--dream-composer-outline-color");
     document.documentElement?.style.removeProperty("--dream-profile-card-padding");
+    document.documentElement?.style.removeProperty("--dream-home-brand-top");
+    document.documentElement?.style.removeProperty("--dream-home-brand-title-line-height");
+    document.documentElement?.style.removeProperty("--dream-home-brand-subtitle-margin-top");
+    document.documentElement?.style.removeProperty("--dream-home-brand-subtitle-line-height");
+    document.documentElement?.style.removeProperty("--dream-home-welcome-panel-background");
+    document.documentElement?.style.removeProperty("--dream-home-welcome-panel-border");
+    document.documentElement?.style.removeProperty("--dream-home-welcome-panel-radius");
+    document.documentElement?.style.removeProperty("--dream-home-welcome-panel-shadow");
+    document.documentElement?.style.removeProperty("--dream-home-welcome-panel-overflow");
+    document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-background");
+    document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-shadow");
     document.querySelectorAll(".dream-home").forEach((node) => node.classList.remove("dream-home"));
     document.querySelectorAll(".dream-home-shell").forEach((node) => node.classList.remove("dream-home-shell"));
     document.getElementById(STYLE_ID)?.remove();
@@ -72,6 +94,17 @@
     root.style.setProperty("--dream-composer-border-color", profileValues.composerBorderColor);
     root.style.setProperty("--dream-composer-outline-color", profileValues.composerOutlineColor);
     root.style.setProperty("--dream-profile-card-padding", profileValues.profileCardPadding);
+    root.style.setProperty("--dream-home-brand-top", profileValues.homeBrandTop);
+    root.style.setProperty("--dream-home-brand-title-line-height", profileValues.homeBrandTitleLineHeight);
+    root.style.setProperty("--dream-home-brand-subtitle-margin-top", profileValues.homeBrandSubtitleMarginTop);
+    root.style.setProperty("--dream-home-brand-subtitle-line-height", profileValues.homeBrandSubtitleLineHeight);
+    root.style.setProperty("--dream-home-welcome-panel-background", profileValues.homeWelcomePanelBackground);
+    root.style.setProperty("--dream-home-welcome-panel-border", profileValues.homeWelcomePanelBorder);
+    root.style.setProperty("--dream-home-welcome-panel-radius", profileValues.homeWelcomePanelRadius);
+    root.style.setProperty("--dream-home-welcome-panel-shadow", profileValues.homeWelcomePanelShadow);
+    root.style.setProperty("--dream-home-welcome-panel-overflow", profileValues.homeWelcomePanelOverflow);
+    root.style.setProperty("--dream-sidebar-new-task-inner-background", profileValues.sidebarNewTaskInnerBackground);
+    root.style.setProperty("--dream-sidebar-new-task-inner-shadow", profileValues.sidebarNewTaskInnerShadow);
 
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -79,9 +112,9 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "4.2") {
+    if (style.dataset.dreamVersion !== "4.4") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "4.2";
+      style.dataset.dreamVersion = "4.4";
     }
 
     const home = document.querySelector('[role="main"]:has([data-testid="home-icon"])');
@@ -133,7 +166,7 @@
   const observer = new MutationObserver(scheduleEnsure);
   observer.observe(document.documentElement, { childList: true, subtree: true });
   const timer = setInterval(ensure, 5000);
-  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.2.0" };
+  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.4.0" };
   ensure();
-  return { installed: true, version: "4.2.0" };
+  return { installed: true, version: "4.4.0" };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_PROFILE_JSON__)

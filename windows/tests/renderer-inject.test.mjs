@@ -15,6 +15,14 @@ const payload = template
     art: { overlay: "rgba(1, 2, 3, .4)", position: "center", size: "cover" },
     composer: { background: "rgba(4, 5, 6, .7)", borderColor: "rgb(7, 8, 9)", outlineColor: "rgb(10, 11, 12)" },
     profileCards: { padding: "15px" },
+    home: {
+      brandTop: "7px",
+      brandTitleLineHeight: "1.3",
+      brandSubtitleMarginTop: "2px",
+      brandSubtitleLineHeight: "1.4",
+      welcomePanel: { background: "transparent", border: "0", radius: "0", shadow: "none", overflow: "visible" },
+    },
+    sidebar: { newTask: { innerBackground: "transparent", innerShadow: "none" } },
   }));
 
 function createFixture({ shellPresent, staleSkin = false }) {
@@ -134,7 +142,10 @@ assert.equal(main.rootClasses.has("codex-dream-skin"), true);
 assert.equal(main.rootStyles.get("--dream-art"), 'url("blob:fixture")');
 assert.equal(main.rootStyles.get("--dream-overlay"), "rgba(1, 2, 3, .4)");
 assert.equal(main.rootStyles.get("--dream-composer-background"), "rgba(4, 5, 6, .7)");
-assert.equal(main.rootStyles.get("--dream-profile-card-padding"), "15px");
+  assert.equal(main.rootStyles.get("--dream-profile-card-padding"), "15px");
+  assert.equal(main.rootStyles.get("--dream-home-brand-top"), "7px");
+  assert.equal(main.rootStyles.get("--dream-home-welcome-panel-background"), "transparent");
+  assert.equal(main.rootStyles.get("--dream-sidebar-new-task-inner-background"), "transparent");
 assert.equal(main.nodes.has("codex-dream-skin-style"), true);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), true);
 assert.equal(main.context.window.__CODEX_DREAM_SKIN_STATE__.cleanup(), true);
@@ -143,7 +154,10 @@ assert.equal(main.nodes.has("codex-dream-skin-style"), false);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), false);
 assert.equal(main.rootStyles.has("--dream-overlay"), false);
 assert.equal(main.rootStyles.has("--dream-composer-background"), false);
-assert.equal(main.rootStyles.has("--dream-profile-card-padding"), false);
+  assert.equal(main.rootStyles.has("--dream-profile-card-padding"), false);
+  assert.equal(main.rootStyles.has("--dream-home-brand-top"), false);
+  assert.equal(main.rootStyles.has("--dream-home-welcome-panel-background"), false);
+  assert.equal(main.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
 assert.deepEqual(main.revokedUrls, ["blob:fixture"]);
 
 const auxiliary = createFixture({ shellPresent: false, staleSkin: true });
@@ -153,7 +167,10 @@ assert.equal(auxiliary.rootClasses.has("codex-dream-skin"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-art"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-overlay"), false);
 assert.equal(auxiliary.rootStyles.has("--dream-composer-background"), false);
-assert.equal(auxiliary.rootStyles.has("--dream-profile-card-padding"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-profile-card-padding"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-home-brand-top"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-home-welcome-panel-background"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-style"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-chrome"), false);
 
