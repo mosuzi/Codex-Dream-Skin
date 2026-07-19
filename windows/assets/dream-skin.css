@@ -25,6 +25,10 @@
   --dream-home-welcome-panel-overflow: visible;
   --dream-sidebar-new-task-inner-background: transparent;
   --dream-sidebar-new-task-inner-shadow: none;
+  --dream-send-button-background: linear-gradient(145deg, #7095c0, #476d98);
+  --dream-pause-button-background: rgba(92, 132, 176, .20);
+  --dream-pause-button-border-color: rgba(139, 180, 220, .42);
+  --dream-pause-button-color: #d6e7f7;
 }
 
 html.codex-dream-skin body {
@@ -182,8 +186,19 @@ html.codex-dream-skin .composer-surface-chrome:focus-within {
 }
 
 html.codex-dream-skin button[class~="bg-token-foreground"] {
-  background: linear-gradient(145deg, #5b789b, #34516f) !important;
+  /* The send/stop control needs a distinct active color, without becoming a
+     bright call-to-action that distracts from the conversation. */
+  background: var(--dream-send-button-background) !important;
   color: #fff !important;
+}
+
+/* A goal can be paused from its action strip. It was inheriting tertiary text
+   color and looked disabled; give that specific action a quiet active state. */
+html.codex-dream-skin button[aria-label*="暂停"],
+html.codex-dream-skin button[aria-label*="Pause"] {
+  background: var(--dream-pause-button-background) !important;
+  border-color: var(--dream-pause-button-border-color) !important;
+  color: var(--dream-pause-button-color) !important;
 }
 
 html.codex-dream-skin article,

@@ -38,5 +38,15 @@
       "innerBackground": "transparent",
       "innerShadow": "none"
     }
+  },
+  "actions": {
+    "send": {
+      "background": "linear-gradient(145deg, #7095c0, #476d98)"
+    },
+    "pause": {
+      "background": "rgba(92, 132, 176, .20)",
+      "borderColor": "rgba(139, 180, 220, .42)",
+      "color": "#d6e7f7"
+    }
   }
 }

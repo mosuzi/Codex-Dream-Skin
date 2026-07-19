@@ -23,6 +23,10 @@ const payload = template
       welcomePanel: { background: "transparent", border: "0", radius: "0", shadow: "none", overflow: "visible" },
     },
     sidebar: { newTask: { innerBackground: "transparent", innerShadow: "none" } },
+    actions: {
+      send: { background: "linear-gradient(145deg, #749ac5, #4b719d)" },
+      pause: { background: "rgba(90, 130, 170, .2)", borderColor: "rgb(130, 170, 210)", color: "#d0e2f5" },
+    },
   }));
 
 function createFixture({ shellPresent, staleSkin = false }) {
@@ -146,6 +150,8 @@ assert.equal(main.rootStyles.get("--dream-composer-background"), "rgba(4, 5, 6, 
   assert.equal(main.rootStyles.get("--dream-home-brand-top"), "7px");
   assert.equal(main.rootStyles.get("--dream-home-welcome-panel-background"), "transparent");
   assert.equal(main.rootStyles.get("--dream-sidebar-new-task-inner-background"), "transparent");
+  assert.equal(main.rootStyles.get("--dream-send-button-background"), "linear-gradient(145deg, #749ac5, #4b719d)");
+  assert.equal(main.rootStyles.get("--dream-pause-button-color"), "#d0e2f5");
 assert.equal(main.nodes.has("codex-dream-skin-style"), true);
 assert.equal(main.nodes.has("codex-dream-skin-chrome"), true);
 assert.equal(main.context.window.__CODEX_DREAM_SKIN_STATE__.cleanup(), true);
@@ -158,6 +164,8 @@ assert.equal(main.rootStyles.has("--dream-composer-background"), false);
   assert.equal(main.rootStyles.has("--dream-home-brand-top"), false);
   assert.equal(main.rootStyles.has("--dream-home-welcome-panel-background"), false);
   assert.equal(main.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
+  assert.equal(main.rootStyles.has("--dream-send-button-background"), false);
+  assert.equal(main.rootStyles.has("--dream-pause-button-color"), false);
 assert.deepEqual(main.revokedUrls, ["blob:fixture"]);
 
 const auxiliary = createFixture({ shellPresent: false, staleSkin: true });
@@ -171,6 +179,8 @@ assert.equal(auxiliary.rootStyles.has("--dream-composer-background"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-home-brand-top"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-home-welcome-panel-background"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-send-button-background"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-pause-button-color"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-style"), false);
 assert.equal(auxiliary.nodes.has("codex-dream-skin-chrome"), false);
 
