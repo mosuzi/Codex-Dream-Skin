@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "4.6.0";
+const SKIN_VERSION = "4.7.0";
 const ACTIVE_PROFILE_PATH = path.join(root, "themes", "active.json");
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
 const BROWSER_ID_PATTERN = /^[A-Za-z0-9._-]{1,200}$/;

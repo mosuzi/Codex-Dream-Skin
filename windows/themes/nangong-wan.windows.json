@@ -38,7 +38,8 @@
       "textColor": "#dce8f6",
       "shadow": "none",
       "hoverBackground": "rgba(28, 51, 76, .70)",
-      "hoverBorderColor": "rgba(214, 173, 104, .55)"
+      "hoverBorderColor": "rgba(214, 173, 104, .55)",
+      "paddingInline": "14px"
     }
   },
   "sidebar": {

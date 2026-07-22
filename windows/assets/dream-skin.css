@@ -29,6 +29,7 @@
   --dream-home-suggestions-shadow: none;
   --dream-home-suggestions-hover-background: rgba(28, 51, 76, .70);
   --dream-home-suggestions-hover-border-color: rgba(214, 173, 104, .55);
+  --dream-home-suggestions-padding-inline: 14px;
   --dream-sidebar-new-task-inner-background: transparent;
   --dream-sidebar-new-task-inner-shadow: none;
   --dream-send-button-background: linear-gradient(145deg, #7095c0, #476d98);
@@ -169,6 +170,7 @@ html.codex-dream-skin .dream-home { color: var(--dream-ink) !important; }
   color: var(--dream-home-suggestions-text-color) !important;
   box-shadow: var(--dream-home-suggestions-shadow) !important;
   backdrop-filter: blur(8px) saturate(108%) !important;
+  padding-inline: var(--dream-home-suggestions-padding-inline) !important;
 }
 
 .dream-home .group\/home-suggestions button:hover {

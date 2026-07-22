@@ -27,6 +27,7 @@
     homeSuggestionsShadow: profile?.home?.suggestions?.shadow || "none",
     homeSuggestionsHoverBackground: profile?.home?.suggestions?.hoverBackground || "rgba(28, 51, 76, .70)",
     homeSuggestionsHoverBorderColor: profile?.home?.suggestions?.hoverBorderColor || "rgba(214, 173, 104, .55)",
+    homeSuggestionsPaddingInline: profile?.home?.suggestions?.paddingInline || "14px",
     sidebarNewTaskInnerBackground: profile?.sidebar?.newTask?.innerBackground || "transparent",
     sidebarNewTaskInnerShadow: profile?.sidebar?.newTask?.innerShadow || "none",
     sendButtonBackground: profile?.actions?.send?.background || "linear-gradient(145deg, #7095c0, #476d98)",
@@ -53,7 +54,7 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "4.6";
+    existingStyle.dataset.dreamVersion = "4.7";
   }
 
   const clearSkinDom = () => {
@@ -81,6 +82,7 @@
     document.documentElement?.style.removeProperty("--dream-home-suggestions-shadow");
     document.documentElement?.style.removeProperty("--dream-home-suggestions-hover-background");
     document.documentElement?.style.removeProperty("--dream-home-suggestions-hover-border-color");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-padding-inline");
     document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-background");
     document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-shadow");
     document.documentElement?.style.removeProperty("--dream-send-button-background");
@@ -129,6 +131,7 @@
     root.style.setProperty("--dream-home-suggestions-shadow", profileValues.homeSuggestionsShadow);
     root.style.setProperty("--dream-home-suggestions-hover-background", profileValues.homeSuggestionsHoverBackground);
     root.style.setProperty("--dream-home-suggestions-hover-border-color", profileValues.homeSuggestionsHoverBorderColor);
+    root.style.setProperty("--dream-home-suggestions-padding-inline", profileValues.homeSuggestionsPaddingInline);
     root.style.setProperty("--dream-sidebar-new-task-inner-background", profileValues.sidebarNewTaskInnerBackground);
     root.style.setProperty("--dream-sidebar-new-task-inner-shadow", profileValues.sidebarNewTaskInnerShadow);
     root.style.setProperty("--dream-send-button-background", profileValues.sendButtonBackground);
@@ -142,9 +145,9 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "4.6") {
+    if (style.dataset.dreamVersion !== "4.7") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "4.6";
+      style.dataset.dreamVersion = "4.7";
     }
 
     const home = document.querySelector('[role="main"]:has([data-testid="home-icon"])');
@@ -196,7 +199,7 @@
   const observer = new MutationObserver(scheduleEnsure);
   observer.observe(document.documentElement, { childList: true, subtree: true });
   const timer = setInterval(ensure, 5000);
-  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.6.0" };
+  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.7.0" };
   ensure();
-  return { installed: true, version: "4.6.0" };
+  return { installed: true, version: "4.7.0" };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_PROFILE_JSON__)
