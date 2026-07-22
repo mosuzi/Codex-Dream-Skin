@@ -21,6 +21,10 @@ const payload = template
       brandSubtitleMarginTop: "2px",
       brandSubtitleLineHeight: "1.4",
       welcomePanel: { background: "transparent", border: "0", radius: "0", shadow: "none", overflow: "visible" },
+      suggestions: {
+        background: "rgba(8, 19, 33, .5)", borderColor: "rgb(130, 160, 190)", textColor: "#d8e7f5",
+        shadow: "none", hoverBackground: "rgba(25, 50, 75, .7)", hoverBorderColor: "rgb(210, 175, 115)",
+      },
     },
     sidebar: { newTask: { innerBackground: "transparent", innerShadow: "none" } },
     actions: {
@@ -149,6 +153,8 @@ assert.equal(main.rootStyles.get("--dream-composer-background"), "rgba(4, 5, 6, 
   assert.equal(main.rootStyles.get("--dream-profile-card-padding"), "15px");
   assert.equal(main.rootStyles.get("--dream-home-brand-top"), "7px");
   assert.equal(main.rootStyles.get("--dream-home-welcome-panel-background"), "transparent");
+  assert.equal(main.rootStyles.get("--dream-home-suggestions-background"), "rgba(8, 19, 33, .5)");
+  assert.equal(main.rootStyles.get("--dream-home-suggestions-text-color"), "#d8e7f5");
   assert.equal(main.rootStyles.get("--dream-sidebar-new-task-inner-background"), "transparent");
   assert.equal(main.rootStyles.get("--dream-send-button-background"), "linear-gradient(145deg, #749ac5, #4b719d)");
   assert.equal(main.rootStyles.get("--dream-pause-button-color"), "#d0e2f5");
@@ -163,6 +169,8 @@ assert.equal(main.rootStyles.has("--dream-composer-background"), false);
   assert.equal(main.rootStyles.has("--dream-profile-card-padding"), false);
   assert.equal(main.rootStyles.has("--dream-home-brand-top"), false);
   assert.equal(main.rootStyles.has("--dream-home-welcome-panel-background"), false);
+  assert.equal(main.rootStyles.has("--dream-home-suggestions-background"), false);
+  assert.equal(main.rootStyles.has("--dream-home-suggestions-text-color"), false);
   assert.equal(main.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
   assert.equal(main.rootStyles.has("--dream-send-button-background"), false);
   assert.equal(main.rootStyles.has("--dream-pause-button-color"), false);
@@ -178,6 +186,8 @@ assert.equal(auxiliary.rootStyles.has("--dream-composer-background"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-profile-card-padding"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-home-brand-top"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-home-welcome-panel-background"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-home-suggestions-background"), false);
+  assert.equal(auxiliary.rootStyles.has("--dream-home-suggestions-text-color"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-sidebar-new-task-inner-background"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-send-button-background"), false);
   assert.equal(auxiliary.rootStyles.has("--dream-pause-button-color"), false);

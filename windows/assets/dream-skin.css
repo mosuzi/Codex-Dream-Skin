@@ -23,6 +23,12 @@
   --dream-home-welcome-panel-radius: 0;
   --dream-home-welcome-panel-shadow: none;
   --dream-home-welcome-panel-overflow: visible;
+  --dream-home-suggestions-background: rgba(8, 19, 33, .52);
+  --dream-home-suggestions-border-color: rgba(153, 183, 218, .24);
+  --dream-home-suggestions-text-color: #dce8f6;
+  --dream-home-suggestions-shadow: none;
+  --dream-home-suggestions-hover-background: rgba(28, 51, 76, .70);
+  --dream-home-suggestions-hover-border-color: rgba(214, 173, 104, .55);
   --dream-sidebar-new-task-inner-background: transparent;
   --dream-sidebar-new-task-inner-shadow: none;
   --dream-send-button-background: linear-gradient(145deg, #7095c0, #476d98);
@@ -156,18 +162,24 @@ html.codex-dream-skin .dream-home { color: var(--dream-ink) !important; }
 }
 
 .dream-home .group\/home-suggestions button {
-  background: linear-gradient(150deg, rgba(20, 34, 52, .98), rgba(13, 25, 40, .98)) !important;
-  border: 1px solid var(--dream-line) !important;
-  color: var(--dream-ink) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
+  /* Keep prompt suggestions clickable without reintroducing the opaque card
+     stack that was removed from the new-task page. */
+  background: var(--dream-home-suggestions-background) !important;
+  border: 1px solid var(--dream-home-suggestions-border-color) !important;
+  color: var(--dream-home-suggestions-text-color) !important;
+  box-shadow: var(--dream-home-suggestions-shadow) !important;
+  backdrop-filter: blur(8px) saturate(108%) !important;
 }
 
 .dream-home .group\/home-suggestions button:hover {
-  border-color: rgba(214, 173, 104, .65) !important;
-  background: rgba(31, 48, 70, .98) !important;
+  border-color: var(--dream-home-suggestions-hover-border-color) !important;
+  background: var(--dream-home-suggestions-hover-background) !important;
 }
 
-.dream-home .group\/home-suggestions button > span:last-child,
+.dream-home .group\/home-suggestions button > span:last-child {
+  color: var(--dream-home-suggestions-text-color) !important;
+}
+
 html.codex-dream-skin [data-feature="game-source"],
 html.codex-dream-skin .ProseMirror {
   color: var(--dream-muted) !important;

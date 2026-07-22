@@ -21,6 +21,12 @@
     homeWelcomePanelRadius: profile?.home?.welcomePanel?.radius || "0",
     homeWelcomePanelShadow: profile?.home?.welcomePanel?.shadow || "none",
     homeWelcomePanelOverflow: profile?.home?.welcomePanel?.overflow || "visible",
+    homeSuggestionsBackground: profile?.home?.suggestions?.background || "rgba(8, 19, 33, .52)",
+    homeSuggestionsBorderColor: profile?.home?.suggestions?.borderColor || "rgba(153, 183, 218, .24)",
+    homeSuggestionsTextColor: profile?.home?.suggestions?.textColor || "#dce8f6",
+    homeSuggestionsShadow: profile?.home?.suggestions?.shadow || "none",
+    homeSuggestionsHoverBackground: profile?.home?.suggestions?.hoverBackground || "rgba(28, 51, 76, .70)",
+    homeSuggestionsHoverBorderColor: profile?.home?.suggestions?.hoverBorderColor || "rgba(214, 173, 104, .55)",
     sidebarNewTaskInnerBackground: profile?.sidebar?.newTask?.innerBackground || "transparent",
     sidebarNewTaskInnerShadow: profile?.sidebar?.newTask?.innerShadow || "none",
     sendButtonBackground: profile?.actions?.send?.background || "linear-gradient(145deg, #7095c0, #476d98)",
@@ -47,7 +53,7 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "4.5";
+    existingStyle.dataset.dreamVersion = "4.6";
   }
 
   const clearSkinDom = () => {
@@ -69,6 +75,12 @@
     document.documentElement?.style.removeProperty("--dream-home-welcome-panel-radius");
     document.documentElement?.style.removeProperty("--dream-home-welcome-panel-shadow");
     document.documentElement?.style.removeProperty("--dream-home-welcome-panel-overflow");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-background");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-border-color");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-text-color");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-shadow");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-hover-background");
+    document.documentElement?.style.removeProperty("--dream-home-suggestions-hover-border-color");
     document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-background");
     document.documentElement?.style.removeProperty("--dream-sidebar-new-task-inner-shadow");
     document.documentElement?.style.removeProperty("--dream-send-button-background");
@@ -111,6 +123,12 @@
     root.style.setProperty("--dream-home-welcome-panel-radius", profileValues.homeWelcomePanelRadius);
     root.style.setProperty("--dream-home-welcome-panel-shadow", profileValues.homeWelcomePanelShadow);
     root.style.setProperty("--dream-home-welcome-panel-overflow", profileValues.homeWelcomePanelOverflow);
+    root.style.setProperty("--dream-home-suggestions-background", profileValues.homeSuggestionsBackground);
+    root.style.setProperty("--dream-home-suggestions-border-color", profileValues.homeSuggestionsBorderColor);
+    root.style.setProperty("--dream-home-suggestions-text-color", profileValues.homeSuggestionsTextColor);
+    root.style.setProperty("--dream-home-suggestions-shadow", profileValues.homeSuggestionsShadow);
+    root.style.setProperty("--dream-home-suggestions-hover-background", profileValues.homeSuggestionsHoverBackground);
+    root.style.setProperty("--dream-home-suggestions-hover-border-color", profileValues.homeSuggestionsHoverBorderColor);
     root.style.setProperty("--dream-sidebar-new-task-inner-background", profileValues.sidebarNewTaskInnerBackground);
     root.style.setProperty("--dream-sidebar-new-task-inner-shadow", profileValues.sidebarNewTaskInnerShadow);
     root.style.setProperty("--dream-send-button-background", profileValues.sendButtonBackground);
@@ -124,9 +142,9 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "4.5") {
+    if (style.dataset.dreamVersion !== "4.6") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "4.5";
+      style.dataset.dreamVersion = "4.6";
     }
 
     const home = document.querySelector('[role="main"]:has([data-testid="home-icon"])');
@@ -178,7 +196,7 @@
   const observer = new MutationObserver(scheduleEnsure);
   observer.observe(document.documentElement, { childList: true, subtree: true });
   const timer = setInterval(ensure, 5000);
-  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.5.0" };
+  window[STATE_KEY] = { ensure, cleanup, observer, timer, scheduler, artUrl, version: "4.6.0" };
   ensure();
-  return { installed: true, version: "4.5.0" };
+  return { installed: true, version: "4.6.0" };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_PROFILE_JSON__)

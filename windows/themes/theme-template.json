@@ -31,6 +31,14 @@
       "radius": "0",
       "shadow": "none",
       "overflow": "visible"
+    },
+    "suggestions": {
+      "background": "rgba(8, 19, 33, .52)",
+      "borderColor": "rgba(153, 183, 218, .24)",
+      "textColor": "#dce8f6",
+      "shadow": "none",
+      "hoverBackground": "rgba(28, 51, 76, .70)",
+      "hoverBorderColor": "rgba(214, 173, 104, .55)"
     }
   },
   "sidebar": {
